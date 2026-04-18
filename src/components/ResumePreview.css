@@ -1,0 +1,138 @@
+.preview-shell {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.preview-shell h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+}
+
+.resume-sheet {
+  width: 100%;
+  max-width: 794px;
+  margin: 0 auto;
+  min-height: 1123px;
+  background: #ffffff;
+  color: #102a43;
+  padding: 1.3rem 1.35rem;
+  border-radius: 12px;
+  border: 1px solid #c7d7e7;
+}
+
+.resume-sheet section {
+  margin-top: 1rem;
+}
+
+.resume-sheet h2 {
+  margin: 0 0 0.55rem;
+  color: #0f6378;
+  border-bottom: 1px solid #d9e5f1;
+  font-size: 1rem;
+  padding-bottom: 0.3rem;
+}
+
+.resume-sheet p,
+.resume-sheet li {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.resume-sheet ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.empty-note {
+  margin: 0;
+  color: #6d7f92;
+}
+
+.resume-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.resume-header h1 {
+  margin: 0;
+  font-family: "DM Serif Text", Georgia, serif;
+  color: #0b3e59;
+  font-weight: 400;
+  font-size: 1.75rem;
+}
+
+.contact-line,
+.address-line {
+  margin: 0.35rem 0 0;
+  color: #355070;
+}
+
+.profile-photo,
+.photo-placeholder {
+  width: 88px;
+  height: 88px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid #cde2f8;
+}
+
+.photo-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #6c7a89;
+  background: #f2f6fb;
+}
+
+.chip-list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip-list li {
+  background: #edf6f9;
+  border: 1px solid #c7dce3;
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+}
+
+.template-classic {
+  border-top: 8px solid #147d96;
+}
+
+.template-modern {
+  border-top: 8px solid #355070;
+  background:
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 220px),
+    radial-gradient(circle at 95% 5%, rgba(32, 91, 150, 0.16), transparent 45%);
+}
+
+.template-modern h2 {
+  color: #355070;
+}
+
+@media (max-width: 720px) {
+  .resume-sheet {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .resume-header {
+    align-items: flex-start;
+  }
+
+  .resume-header h1 {
+    font-size: 1.4rem;
+  }
+}
+

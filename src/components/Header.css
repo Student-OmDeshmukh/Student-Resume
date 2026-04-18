@@ -1,0 +1,58 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--bg-card) 82%, transparent);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 0.9rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.brand-kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+
+.brand-title {
+  margin: 0.2rem 0 0;
+  font-family: "DM Serif Text", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.75vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.mode-button {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode-button:hover {
+  border-color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

@@ -1,0 +1,36 @@
+.template-selector {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 0.95rem 1rem;
+  box-shadow: 0 8px 22px rgba(16, 42, 67, 0.05);
+}
+
+.selector-label {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.selector-buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.selector-buttons button {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+}
+
+.selector-buttons button.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
