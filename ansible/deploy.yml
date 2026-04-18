@@ -1,0 +1,110 @@
+---
+- name: Build and deploy Student Resume Builder with Ansible
+  hosts: web
+  become: true
+  vars:
+    nginx_site_conf: /etc/nginx/sites-available/student-resume-builder.conf
+    nginx_site_link: /etc/nginx/sites-enabled/student-resume-builder.conf
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install required base packages
+      ansible.builtin.apt:
+        name:
+          - curl
+          - git
+          - ca-certificates
+          - gnupg
+          - nginx
+        state: present
+
+    - name: Add NodeSource setup script
+      ansible.builtin.get_url:
+        url: "https://deb.nodesource.com/setup_{{ node_major_version }}.x"
+        dest: /tmp/nodesource_setup.sh
+        mode: "0755"
+
+    - name: Configure NodeSource repository
+      ansible.builtin.command:
+        cmd: bash /tmp/nodesource_setup.sh
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: true
+
+    - name: Ensure app root directory exists
+      ansible.builtin.file:
+        path: "{{ app_root }}"
+        state: directory
+        mode: "0755"
+
+    - name: Pull latest project code
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_root }}"
+        version: "{{ repo_branch }}"
+        force: true
+
+    - name: Install npm dependencies using npm ci
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ app_root }}"
+      register: npm_ci_result
+      ignore_errors: true
+      changed_when: npm_ci_result.rc == 0
+
+    - name: Fallback to npm install when npm ci fails
+      ansible.builtin.command: npm install
+      args:
+        chdir: "{{ app_root }}"
+      when: npm_ci_result.rc != 0
+
+    - name: Build React app
+      ansible.builtin.command: npm run build
+      args:
+        chdir: "{{ app_root }}"
+
+    - name: Add Nginx config for resume app
+      ansible.builtin.template:
+        src: templates/nginx-resume.conf.j2
+        dest: "{{ nginx_site_conf }}"
+        mode: "0644"
+      notify: Reload Nginx
+
+    - name: Enable site in Nginx
+      ansible.builtin.file:
+        src: "{{ nginx_site_conf }}"
+        dest: "{{ nginx_site_link }}"
+        state: link
+      notify: Reload Nginx
+
+    - name: Disable default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload Nginx
+
+    - name: Validate Nginx configuration
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: Ensure Nginx service is running and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Reload Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
