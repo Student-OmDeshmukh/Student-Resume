@@ -18,12 +18,20 @@ The playbook automatically:
 5. Configures Nginx
 6. Hosts your React app on port 80
 
+## Easiest Mode (No VM, No Cloud)
+
+This project is already set to deploy on your own laptop using:
+
+- `localhost` inventory
+- local source path: `/mnt/d/project/cc`
+
+So you do not need VM IP, SSH key, or cloud subscription.
+
 ## Prerequisites
 
-1. One Linux VM (Ubuntu 22.04/24.04) with public IP
-2. SSH access to VM
-3. Project pushed to GitHub
-4. Ansible installed on your control machine (WSL Ubuntu or Linux)
+1. Windows with WSL Ubuntu installed
+2. Ansible installed inside WSL
+3. Project available at `D:\project\cc`
 
 Install Ansible (Ubuntu/WSL):
 
@@ -40,16 +48,16 @@ Edit [ansible/inventory.ini](/d:/project/cc/ansible/inventory.ini):
 
 ```ini
 [web]
-resume-vm ansible_host=YOUR_VM_PUBLIC_IP ansible_user=YOUR_VM_USERNAME ansible_ssh_private_key_file=~/.ssh/YOUR_KEY.pem
+localhost ansible_connection=local
 ```
 
-### 2) Update variables
+### 2) Keep local-source mode enabled
 
 Edit [ansible/group_vars/web.yml](/d:/project/cc/ansible/group_vars/web.yml):
 
 ```yaml
-repo_url: "https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git"
-repo_branch: "main"
+use_local_source: true
+local_source_path: "/mnt/d/project/cc"
 app_root: "/opt/student-resume-builder"
 node_major_version: "20"
 nginx_server_name: "_"
@@ -64,15 +72,9 @@ cd ansible
 ansible-playbook deploy.yml --ask-become-pass
 ```
 
-If your VM uses password SSH (not key), add:
-
-```bash
-ansible-playbook deploy.yml -k --ask-become-pass
-```
-
 ## Verify
 
-1. Open browser: `http://<YOUR_VM_PUBLIC_IP>`
+1. Open browser: `http://localhost`
 2. Your Student Resume Builder site should load.
 
 ## Re-Deploy After Code Changes
@@ -88,6 +90,5 @@ ansible-playbook deploy.yml --ask-become-pass
 
 1. Show Ansible inventory and playbook.
 2. Run `ansible-playbook deploy.yml --ask-become-pass`.
-3. Explain auto tasks: install tools, pull code, build, configure Nginx.
-4. Open VM IP in browser and show deployed app.
-
+3. Explain auto tasks: install tools, sync code, build, configure Nginx.
+4. Open `http://localhost` and show deployed app.

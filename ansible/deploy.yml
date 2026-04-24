@@ -17,6 +17,7 @@
         name:
           - curl
           - git
+          - rsync
           - ca-certificates
           - gnupg
           - nginx
@@ -46,12 +47,24 @@
         state: directory
         mode: "0755"
 
-    - name: Pull latest project code
+    - name: Pull latest project code from GitHub
       ansible.builtin.git:
         repo: "{{ repo_url }}"
         dest: "{{ app_root }}"
         version: "{{ repo_branch }}"
         force: true
+      when: not use_local_source
+
+    - name: Sync project code from local machine
+      ansible.builtin.command:
+        cmd: >
+          rsync -a --delete
+          --exclude '.git'
+          --exclude 'node_modules'
+          --exclude 'dist'
+          --exclude 'ansible'
+          {{ local_source_path }}/ {{ app_root }}/
+      when: use_local_source
 
     - name: Install npm dependencies using npm ci
       ansible.builtin.command: npm ci
@@ -107,4 +120,3 @@
       ansible.builtin.service:
         name: nginx
         state: reloaded
-
